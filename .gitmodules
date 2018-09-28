@@ -1,0 +1,6 @@
+[submodule "cub"]
+	path = cub
+	url = https://github.com/NVlabs/cub
+[submodule "timer"]
+	path = timer
+	url = https://github.com/wbinventor/timer
