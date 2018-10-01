@@ -395,15 +395,14 @@ void KernelPredictionWorldEvaluateOverPop(uint *worldState, uint **statest1, uin
     //worldFitness[globalThreadIndex()] += ((out+8-1)%8) == worldState[globalThreadIndex()];
     //worldFitness[globalThreadIndex()] += ((out%16) == worldState[globalThreadIndex()]);
 }
-
+// Max Ones World
 __global__
 void KernelMaxOnesWorldUpdateOverPop(uint *worldState, uint **statest, uint **statest1) {
 	// 1 constant input, 10 output states, 8 hidden,
 	// like default TestWorld in our other framework, MABE, for comparison
 	#pragma unroll
-   for (uint o(0); o<NUM_INPUT_STATES; o++) statest1[globalThreadIndex()][o] = 1; // set all inputs to 1
+    for (uint o(0); o<NUM_INPUT_STATES; o++) statest[globalThreadIndex()][o] = 1; // set all inputs to 1
 }
-
 __global__
 void KernelMaxOnesWorldEvaluateOverPop(uint *worldState, uint **states1, uint *worldFitness) {
 	// 1 constant input, 10 output states, 8 hidden,
@@ -796,7 +795,7 @@ int main(int argc, char* argv[]) {
                               popStatestPtrs.device(), 
                               popStatest1Ptrs.device()
                               );
-					 cudaDeviceSynchronize();
+                cudaDeviceSynchronize();
                 timerOff(timerUpdateWorld);
                 timerOn(timerUpdateGates);
                 for (int networkUpdates(0); networkUpdates<1; networkUpdates++) {
@@ -824,10 +823,10 @@ int main(int argc, char* argv[]) {
                                 popStatest[agenti].device(),
                                 popStatest1[agenti].device()
                               );
-                        cudaDeviceSynchronize();
-                        std::swap(popStatest[agenti],popStatest1[agenti]); 
+                        std::swap(popStatest[agenti],popStatest1[agenti]);
 
                     } // end of individual level
+                    cudaDeviceSynchronize();
                     std::swap(popStatestPtrs,popStatest1Ptrs);
                 }
                 timerOff(timerUpdateGates);
